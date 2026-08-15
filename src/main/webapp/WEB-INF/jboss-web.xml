@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+    <!-- Deployed URL will be http://host:port/taskmanagement/
+         Change to <context-root>/</context-root> to deploy at the server root instead. -->
+    <context-root>/taskmanagement</context-root>
+</jboss-web>

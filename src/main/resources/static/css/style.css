@@ -1,0 +1,281 @@
+/* =========================================================================
+   ErconAdjustment Task Tracker
+   Palette: ink #1B2430, canvas #F6F7F9, panel #FFFFFF, line #E2E5EA,
+            accent (indigo) #4B5FE0, accent-soft #EEF0FD,
+            good #1F8A5F, warn #C48A1F, danger #C1443B, muted #6B7280
+   Type: display/body = "Space Grotesk"/"Inter" system fallback, data = "JetBrains Mono" fallback
+   Signature: the mini date-range "track bar" rendered per row, a lightweight
+   at-a-glance Gantt sliver instead of raw start/end text.
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --ink: #1B2430;
+  --canvas: #F6F7F9;
+  --panel: #FFFFFF;
+  --line: #E2E5EA;
+  --accent: #4B5FE0;
+  --accent-soft: #EEF0FD;
+  --good: #1F8A5F;
+  --good-soft: #E7F5EE;
+  --warn: #C48A1F;
+  --warn-soft: #FBF2E1;
+  --danger: #C1443B;
+  --danger-soft: #FBEAE8;
+  --muted: #6B7280;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  background: var(--ink);
+  color: #C9CEDA;
+  padding: 24px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  padding: 0 10px 22px;
+  letter-spacing: -0.01em;
+}
+.brand span { color: #8B98F0; }
+.brand small {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  color: #6B7592;
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  color: #C9CEDA;
+  transition: background .12s ease, color .12s ease;
+  user-select: none;
+}
+.nav-item:hover { background: #2A3547; color: #fff; }
+.nav-item.active { background: var(--accent); color: #fff; }
+.nav-item .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: currentColor; opacity: .5;
+}
+
+.sidebar-foot {
+  margin-top: auto;
+  padding: 10px;
+  font-size: 11px;
+  color: #5B6480;
+  border-top: 1px solid #2A3547;
+  padding-top: 14px;
+}
+
+/* ---- Main ---- */
+.main {
+  padding: 28px 34px 60px;
+  max-width: 1180px;
+}
+
+.view-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.view-header h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+.view-header p { margin: 0; color: var(--muted); font-size: 13px; }
+
+.btn {
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .08s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { box-shadow: 0 4px 14px rgba(75,95,224,.35); }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger-ghost { background: transparent; color: var(--danger); border: 1px solid var(--danger-soft); padding: 5px 10px; font-size: 12px; }
+.btn-danger-ghost:hover { background: var(--danger-soft); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+/* ---- Stat cards (dashboard) ---- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.stat-card .label {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--muted); font-weight: 600; margin-bottom: 8px;
+}
+.stat-card .value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px; font-weight: 500;
+}
+
+/* ---- Panels & tables ---- */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.panel-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px; border-bottom: 1px solid var(--line);
+}
+.panel-head h2 { font-size: 14px; margin: 0; font-weight: 600; }
+
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--line);
+  background: #FAFBFC;
+}
+tbody td {
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #FAFBFF; }
+.mono { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--muted); }
+.empty-row td { text-align: center; color: var(--muted); padding: 28px; font-style: italic; }
+
+/* Status pill */
+.pill {
+  display: inline-block;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 20px;
+  white-space: nowrap;
+}
+.pill-notstarted { background: #EEF0F2; color: #4B5566; }
+.pill-inprogress { background: var(--accent-soft); color: var(--accent); }
+.pill-blocked { background: var(--danger-soft); color: var(--danger); }
+.pill-onhold { background: var(--warn-soft); color: var(--warn); }
+.pill-completed { background: var(--good-soft); color: var(--good); }
+.pill-cancelled { background: #EEF0F2; color: #8B93A1; }
+
+/* Signature: mini schedule track bar showing start->end within the visible window */
+.track {
+  position: relative;
+  width: 130px; height: 8px;
+  background: #EEF0F2;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.track-fill {
+  position: absolute; top: 0; bottom: 0;
+  background: var(--accent);
+  border-radius: 4px;
+}
+.track-fill.blocked { background: var(--danger); }
+.track-fill.completed { background: var(--good); }
+.track-fill.onhold { background: var(--warn); }
+.track-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+/* ---- Forms / modal ---- */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(20,24,33,.45);
+  display: none; align-items: center; justify-content: center; z-index: 50;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px; padding: 24px 26px;
+  width: 460px; max-width: calc(100vw - 40px);
+  max-height: calc(100vh - 60px); overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(20,24,33,.25);
+}
+.modal h3 { margin: 0 0 16px; font-family: 'Space Grotesk', sans-serif; font-size: 17px; }
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 12px; font-weight: 600; color: var(--muted);
+  margin-bottom: 5px;
+}
+.field input, .field select, .field textarea {
+  width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px;
+  font-family: inherit; font-size: 13px; background: #FCFCFD;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--accent); background: #fff;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--ink); color: #fff; padding: 12px 18px;
+  border-radius: 10px; font-size: 13px; font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25);
+  opacity: 0; transform: translateY(8px); transition: all .2s ease;
+  pointer-events: none; z-index: 100;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.error { background: var(--danger); }
+
+.hidden { display: none !important; }
+
+@media (max-width: 860px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .sidebar { flex-direction: row; overflow-x: auto; padding: 12px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .field-row { grid-template-columns: 1fr; }
+}

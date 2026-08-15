@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ErconAdjustment — Task Tracker</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-shell">
+  <nav class="sidebar">
+    <div class="brand">Ercon<span>Adjustment</span><small>Task Tracker</small></div>
+
+    <div class="nav-item active" data-view="dashboard"><span class="dot"></span>Dashboard</div>
+    <div class="nav-item" data-view="tasks"><span class="dot"></span>Tasks</div>
+    <div class="nav-item" data-view="assignments"><span class="dot"></span>Assignments</div>
+    <div class="nav-item" data-view="progress"><span class="dot"></span>Progress Log</div>
+    <div class="nav-item" data-view="systems"><span class="dot"></span>Systems</div>
+    <div class="nav-item" data-view="employees"><span class="dot"></span>Team</div>
+
+    <div class="sidebar-foot">Prem · Venkat · Marvin</div>
+  </nav>
+
+  <main class="main">
+
+    <!-- ===================== DASHBOARD ===================== -->
+    <section id="view-dashboard" class="view">
+      <div class="view-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Everything currently allocated across the team.</p>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="stat-grid"></div>
+
+      <div class="panel">
+        <div class="panel-head"><h2>Workload by teammate</h2></div>
+        <table>
+          <thead><tr><th>Employee</th><th>Status</th><th>Tasks</th><th>Man-days allocated</th><th>Man-days actual</th></tr></thead>
+          <tbody id="workload-body"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== TASKS ===================== -->
+    <section id="view-tasks" class="view hidden">
+      <div class="view-header">
+        <div>
+          <h1>Tasks</h1>
+          <p>Work items across every system.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-task">+ New task</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Task</th><th>System</th><th>Priority</th><th>Status</th><th>Planned window</th><th>Created</th><th></th></tr></thead>
+          <tbody id="tasks-body"><tr class="empty-row"><td colspan="7">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== ASSIGNMENTS ===================== -->
+    <section id="view-assignments" class="view hidden">
+      <div class="view-header">
+        <div>
+          <h1>Assignments</h1>
+          <p>Who's working on what, start/end date, and man-days.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-assignment">+ New assignment</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Task</th><th>Employee</th><th>Schedule</th><th>Man-days (alloc / actual)</th><th>Status</th><th></th></tr></thead>
+          <tbody id="assignments-body"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== PROGRESS LOG ===================== -->
+    <section id="view-progress" class="view hidden">
+      <div class="view-header">
+        <div>
+          <h1>Progress log</h1>
+          <p>Status history per assignment — the audit trail.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-progress">+ Log update</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Task / Employee</th><th>Status</th><th>% Complete</th><th>Remarks</th><th>Updated by</th><th>When</th></tr></thead>
+          <tbody id="progress-body"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== SYSTEMS ===================== -->
+    <section id="view-systems" class="view hidden">
+      <div class="view-header">
+        <div>
+          <h1>Systems</h1>
+          <p>The systems your team builds and maintains.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-system">+ New system</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>System</th><th>Description</th><th>Active</th><th></th></tr></thead>
+          <tbody id="systems-body"><tr class="empty-row"><td colspan="4">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===================== EMPLOYEES ===================== -->
+    <section id="view-employees" class="view hidden">
+      <div class="view-header">
+        <div>
+          <h1>Team</h1>
+          <p>Prem, Venkat, Marvin — and anyone else who joins.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-employee">+ Add teammate</button>
+      </div>
+      <div class="panel">
+        <table>
+          <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Active</th><th></th></tr></thead>
+          <tbody id="employees-body"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+
+<div class="modal-backdrop" id="modal-task">
+  <div class="modal">
+    <h3 id="task-modal-title">New task</h3>
+    <input type="hidden" id="task-id">
+    <div class="field"><label>Task name</label><input id="task-name" type="text" placeholder="e.g. Fix payment retry bug"></div>
+    <div class="field"><label>Description</label><textarea id="task-desc" rows="2" placeholder="Optional details"></textarea></div>
+    <div class="field-row">
+      <div class="field"><label>System</label><select id="task-system"></select></div>
+      <div class="field"><label>Priority</label><select id="task-priority"></select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Status</label><select id="task-status"></select></div>
+      <div class="field"><label>Created by</label><select id="task-createdby"></select></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Planned start</label><input id="task-start" type="date"></div>
+      <div class="field"><label>Planned end</label><input id="task-end" type="date"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-task')">Cancel</button>
+      <button class="btn btn-primary" id="task-save">Save task</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-assignment">
+  <div class="modal">
+    <h3>New assignment</h3>
+    <div class="field"><label>Task</label><select id="assign-task"></select></div>
+    <div class="field"><label>Employee</label><select id="assign-employee"></select></div>
+    <div class="field-row">
+      <div class="field"><label>Start date</label><input id="assign-start" type="date"></div>
+      <div class="field"><label>End date</label><input id="assign-end" type="date"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Man-days allocated</label><input id="assign-mandays" type="number" step="0.5" min="0" placeholder="e.g. 3.5"></div>
+      <div class="field"><label>Status</label><select id="assign-status"></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-assignment')">Cancel</button>
+      <button class="btn btn-primary" id="assign-save">Save assignment</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-progress">
+  <div class="modal">
+    <h3>Log a progress update</h3>
+    <div class="field"><label>Assignment</label><select id="progress-assignment"></select></div>
+    <div class="field-row">
+      <div class="field"><label>New status</label><select id="progress-status"></select></div>
+      <div class="field"><label>% complete</label><input id="progress-percent" type="number" min="0" max="100" placeholder="0–100"></div>
+    </div>
+    <div class="field"><label>Updated by</label><select id="progress-updatedby"></select></div>
+    <div class="field"><label>Remarks</label><textarea id="progress-remarks" rows="2" placeholder="What changed?"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-progress')">Cancel</button>
+      <button class="btn btn-primary" id="progress-save">Save update</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-system">
+  <div class="modal">
+    <h3 id="system-modal-title">New system</h3>
+    <input type="hidden" id="system-id">
+    <div class="field"><label>System name</label><input id="system-name" type="text" placeholder="e.g. Billing"></div>
+    <div class="field"><label>Description</label><textarea id="system-desc" rows="2"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-system')">Cancel</button>
+      <button class="btn btn-primary" id="system-save">Save system</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modal-employee">
+  <div class="modal">
+    <h3 id="employee-modal-title">Add teammate</h3>
+    <input type="hidden" id="employee-id">
+    <div class="field"><label>Name</label><input id="employee-name" type="text"></div>
+    <div class="field-row">
+      <div class="field"><label>Role</label><input id="employee-role" type="text" placeholder="e.g. Developer"></div>
+      <div class="field"><label>Email</label><input id="employee-email" type="email"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-employee')">Cancel</button>
+      <button class="btn btn-primary" id="employee-save">Save teammate</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
